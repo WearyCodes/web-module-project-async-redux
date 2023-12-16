@@ -1,12 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { connect } from "react-redux";
-
-const clickHandler = (e) => {
-    e.preventDefault()
-
-}
+import { fetchTask } from "./actions/actions";
+import { NEW_TASK } from "./actions/actions";
+import axios from "axios";
 
 function TodoElement(props) {
+
+
+    useEffect(() => {
+        axios.get(`https://www.boredapi.com/api/activity`)
+        .then(res => 
+            props.fetchTask(res.data))
+        .catch(err => console.log(err))
+    }, [])
+
+
     return (<div>
         <h4>WHAT SHOULD WE DO TODAY?</h4>
         <h3>{props.activity}</h3>
@@ -25,4 +33,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(TodoElement)
+export default connect(mapStateToProps, { fetchTask })(TodoElement)
